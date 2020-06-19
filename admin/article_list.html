@@ -69,9 +69,181 @@
                 </tbody>
             </table>
             <div class="row text-center">
+                <nav aria-label="Page navigation">
+                    <!-- 分页插件的结构 -->
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
             </div>
         </div>
     </div>
+    <!-- 导入库文件 -->
+    <script src="./js/http.js"></script>
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./libs/jquery.twbsPagination.js"></script>
+    <!-- 文章类别模板 -->
+    <script id="art_cate_temp" type="text/html">
+        <option value="">所有分类</option>
+        {{each data v}}
+        <option value="{{v.id}}">{{v.name}}</option>
+        {{/each}}
+    </script>
+    <!-- 文章列表模板 -->
+    <script id="art_list" type="text/html">
+        {{each data.data v}}
+        <tr>
+            <td>{{v.title}}</td>
+            <td>{{v.author}}</td>
+            <td>{{v.category}}</td>
+            <td class="text-center">{{v.date}}</td>
+            <td class="text-center">{{v.state}}</td>
+            <td class="text-center">
+                <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script src=""></script>
+    <!-- <script>
+        // 请求所有文章类别
+        $.ajax({
+            url: BigNew.category_list,
+            type: 'get',
+            success: function(backData) {
+                console.log(backData);
+                var resHtml = template('art_cate_temp', backData);
+                $('#selCategory').html(resHtml);
+            }
+        });
+        // 文章搜索请求，渲染内容
+        $.ajax({
+            url: BigNew.article_query,
+            type: 'get',
+            data: {
+
+            },
+            success: function(backData) {
+                console.log(backData);
+                var resHtml = template('art_list', backData);
+                $('tbody').html(resHtml);
+                // 渲染分页结构
+                $('#pagination').twbsPagination({
+                    totalPages: backData.data.totalPage,
+                    visiblePages: 7,
+                    first: '首页',
+                    prev: '上一页',
+                    next: '下一页',
+                    last: '尾页',
+                    onPageClick: function(event, page) {
+                        // 页面改变事件
+                        // 重新获取数据，渲染内容
+                        $.ajax({
+                            url: BigNew.article_query,
+                            type: 'get',
+                            data: {
+                                key: $('#selCategory').val().trim(),
+                                state: $('#selStatus').val().trim(),
+                                page: page,
+                                perpage: 8
+                            },
+                            success: function(backData) {
+                                var resHtml = template('art_list', backData);
+                                $('tbody').html(resHtml);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        // 给筛选按钮注册点击事件
+        $('#btnSearch').on('click', function(e) {
+            e.preventDefault();
+            // 获取数据 渲染内容
+            $.ajax({
+                url: BigNew.article_query,
+                type: 'get',
+                data: {
+                    key: $('#selCategory').val().trim(),
+                    state: $('#selStatus').val().trim()
+                },
+                success: function(backData) {
+                    console.log(backData);
+                    var resHtml = template('art_list', backData);
+                    $('tbody').html(resHtml);
+                    // 重绘分页条结构
+                    $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, 1); //1为当前显示的页面
+                }
+            });
+        });
+    </script> -->
+    <script>
+        $(function() {
+
+            // 请求所有文章类别
+            $.ajax({
+                url: BigNew.category_list,
+                type: 'get',
+                success: function(backData) {
+                    console.log(backData);
+                    var resHtml = template('art_cate_temp', backData);
+                    $('#selCategory').html(resHtml);
+                }
+            });
+
+
+            // 封装getData函数
+            function getData(myPage, callback) {
+                // 获取数据 渲染内容
+                $.ajax({
+                    url: BigNew.article_query,
+                    type: 'get',
+                    data: {
+                        key: $('#selCategory').val().trim(),
+                        state: $('#selStatus').val().trim(),
+                        page: myPage,
+                        perpage: 3
+                    },
+                    success: function(backData) {
+                        console.log(backData);
+                        if (backData.code == 200) {
+                            var resHtml = template('art_list', backData);
+                            $('tbody').html(resHtml);
+                        };
+                        if (callback != null) {
+                            callback(backData);
+                        };
+                    }
+                });
+            };
+            // 文章搜索请求，渲染内容，显示第一页
+            getData(1, function(backData) {
+                // 分页
+                $('#pagination').twbsPagination({
+                    totalPages: backData.data.totalPage,
+                    visiblePages: 7,
+                    first: '首页',
+                    prev: '上一页',
+                    next: '下一页',
+                    last: '尾页',
+                    onPageClick: function(event, page) {
+                        // 页面改变事件
+                        // 重新获取数据，渲染内容
+                        getData(page, null);
+                    }
+                });
+            });
+            // 给筛选按钮注册点击事件
+            $('#btnSearch').on('click', function(e) {
+                e.preventDefault();
+                getData(1, function(backData) {
+                    // 重绘
+                    $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, 1);
+                })
+            });
+
+
+        });
+    </script>
 </body>
 
 </html>
