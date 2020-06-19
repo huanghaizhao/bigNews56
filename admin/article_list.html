@@ -73,7 +73,10 @@
                     <!-- 分页插件的结构 -->
                     <ul class="pagination" id="pagination"></ul>
                 </nav>
+<<<<<<< HEAD
                 <p class="noData">当前页没有数据...</p>
+=======
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
             </div>
         </div>
     </div>
@@ -98,8 +101,13 @@
             <td class="text-center">{{v.date}}</td>
             <td class="text-center">{{v.state}}</td>
             <td class="text-center">
+<<<<<<< HEAD
                 <a href="article_edit.html" class="btn btn-default btn-xs" data-id="{{v.id}}">编辑</a>
                 <a href="javascript:void(0);" class="btn btn-danger btn-xs delete" data-id="{{v.id}}">删除</a>
+=======
+                <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
             </td>
         </tr>
         {{/each}}
@@ -180,11 +188,16 @@
     <script>
         $(function() {
 
+<<<<<<< HEAD
             // 一：请求所有文章类别
+=======
+            // 请求所有文章类别
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
             $.ajax({
                 url: BigNew.category_list,
                 type: 'get',
                 success: function(backData) {
+<<<<<<< HEAD
                     console.log('111111111111111111111111111111111111111111111111111111111111111111');
                     console.log(backData);
                     if (backData.code == 200) {
@@ -196,6 +209,16 @@
             // 声明全局当前点击页码
             var currentPage;
             // 二：封装getData函数
+=======
+                    console.log(backData);
+                    var resHtml = template('art_cate_temp', backData);
+                    $('#selCategory').html(resHtml);
+                }
+            });
+
+
+            // 封装getData函数
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
             function getData(myPage, callback) {
                 // 获取数据 渲染内容
                 $.ajax({
@@ -208,12 +231,16 @@
                         perpage: 3
                     },
                     success: function(backData) {
+<<<<<<< HEAD
                         console.log('---------------------------------------');
+=======
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
                         console.log(backData);
                         if (backData.code == 200) {
                             var resHtml = template('art_list', backData);
                             $('tbody').html(resHtml);
                         };
+<<<<<<< HEAD
                         // 有数据，回调函数不为null，调用函数者可以执行回调函数
                         if (callback != null && backData.data.totalCount != 0) {
                             callback(backData);
@@ -238,6 +265,15 @@
                 });
             };
             // 三：文章搜索请求，渲染内容，显示第一页
+=======
+                        if (callback != null) {
+                            callback(backData);
+                        };
+                    }
+                });
+            };
+            // 文章搜索请求，渲染内容，显示第一页
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
             getData(1, function(backData) {
                 // 分页
                 $('#pagination').twbsPagination({
@@ -251,11 +287,18 @@
                         // 页面改变事件
                         // 重新获取数据，渲染内容
                         getData(page, null);
+<<<<<<< HEAD
                         currentPage = page;
                     }
                 });
             });
             // 四：给筛选按钮注册点击事件
+=======
+                    }
+                });
+            });
+            // 给筛选按钮注册点击事件
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
             $('#btnSearch').on('click', function(e) {
                 e.preventDefault();
                 getData(1, function(backData) {
@@ -263,6 +306,7 @@
                     $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage, 1);
                 })
             });
+<<<<<<< HEAD
             // 给tbody下的删除按钮注册点击事件委托点击事件
             // 五：发送删除文章请求
             $('tbody').on('click', '.delete', function() {
@@ -286,6 +330,10 @@
                     }
                 });
             })
+=======
+
+
+>>>>>>> 0c3b568d2d7214791947cc4aed491c09fd475118
         });
     </script>
 </body>
