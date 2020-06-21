@@ -98,7 +98,7 @@
             <td class="text-center">{{v.date}}</td>
             <td class="text-center">{{v.state}}</td>
             <td class="text-center">
-                <a href="article_edit.html" class="btn btn-default btn-xs" data-id="{{v.id}}">编辑</a>
+                <a href="article_edit.html?id={{v.id}}" class="btn btn-default btn-xs" data-id="{{v.id}}">编辑</a>
                 <a href="javascript:void(0);" class="btn btn-danger btn-xs delete" data-id="{{v.id}}">删除</a>
             </td>
         </tr>
@@ -287,6 +287,10 @@
                         }
                     });
                 }
+            });
+            // 六：点击发表文章按钮去到发表文章页
+            $('#release_btn').on('click', function() {
+                parent.$('ul.level02>li:eq(1)').click();
             })
         });
     </script>
